@@ -35,8 +35,8 @@ jobs:
           go-version: "^1.21.0"
       - name: Build
         run: |
-          go install gorm.io/gorm
-          go install gorm.io/driver/postgres
+          go install gorm.io/gorm@latest
+          go install gorm.io/driver/postgres@latest
           go build tbls/main.go
       - name: Execute migration
         run: |
