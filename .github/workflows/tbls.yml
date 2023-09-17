@@ -35,8 +35,7 @@ jobs:
           go-version: "^1.21.0"
       - name: Execute migration
         run: |
-          go install github.com/rubenv/sql-migrate/...@latest
-          sql-migrate up -env=local -config=dbconfig.yml
+          go run tbls/main.go
         working-directory: ./tbls
       - name: Execute tbls
         run: |
