@@ -28,7 +28,7 @@ type DB struct {
 	*gorm.DB
 }
 
-func RDBConnect() (*gorm.DB, error) {
+func RDBConnect() (*DB, error) {
 	db, err := createDB()
 	if err != nil {
 		return nil, err
