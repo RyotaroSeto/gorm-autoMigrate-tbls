@@ -34,7 +34,7 @@ jobs:
         with:
           go-version: "^1.21.0"
       - name: Build
-        run: go build -v ./...
+        run: go build tbls/main.go
       - name: Execute migration
         run: |
           go run tbls/main.go
