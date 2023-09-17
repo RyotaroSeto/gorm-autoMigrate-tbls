@@ -7,7 +7,6 @@ er:
   comment: true
   # Distance between tables that display relations in the ER
   # Default is 1
-
   distance: 9
 exclude:
   - gorp_migrations
