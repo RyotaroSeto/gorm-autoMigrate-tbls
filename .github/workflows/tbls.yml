@@ -37,12 +37,12 @@ jobs:
         run: |
           go install github.com/rubenv/sql-migrate/...@latest
           sql-migrate up -env=local -config=dbconfig.yml
-        working-directory: ./docs/db
+        working-directory: ./tbls
       - name: Execute tbls
         run: |
           curl -sL https://git.io/use-tbls > use-tbls.tmp && . ./use-tbls.tmp && rm ./use-tbls.tmp
           tbls doc -f
-        working-directory: ./docs/db
+        working-directory: ./tbls
       # tbls実行後、差分有りもしくは新規ファイルの数をカウントする
       - name: Count uncommit files
         id: check_diff
@@ -50,7 +50,7 @@ jobs:
           git status --porcelain | wc -l
           file_count=$(git status --porcelain | wc -l)
           echo "::set-output name=file_count::$file_count"
-        working-directory: ./docs/db
+        working-directory: ./tbls
       - name: Commit ER graph
         # 更新したER図をPRにコミットする
         if: ${{ steps.check_diff.outputs.file_count != '0' }}
@@ -60,7 +60,7 @@ jobs:
           git add .
           git commit -m "generate er graphs from actions"
           git push
-        working-directory: ./docs/db
+        working-directory: ./tbls
       # PRへ自動コミットしたらPRにコメントしておく
       - name: Report commit on pull request
         if: ${{ steps.check_diff.outputs.file_count != '0' }}
