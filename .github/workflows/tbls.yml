@@ -42,7 +42,8 @@ jobs:
           cache: true
           cache-dependency-path: tbls/go.sum
       - name: Build
-        run: go build -v ./...
+        working-directory: ./tbls
+        run: go build main.go
       - name: Execute migration
         working-directory: ./tbls
         run: |
