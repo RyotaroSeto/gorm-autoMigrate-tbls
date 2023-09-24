@@ -62,7 +62,6 @@ jobs:
           git add .
           git commit -m "generate er graphs from github actions"
           git push
-        working-directory: ./tbls
       - name: Report commit on pull request
         if: ${{ steps.check_diff.outputs.file_count != '0' }}
         uses: actions/github-script@v4
