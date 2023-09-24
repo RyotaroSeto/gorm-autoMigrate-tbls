@@ -12,7 +12,6 @@ type User struct {
 	gorm.Model
 	Name      string
 	Age       uint
-	From      string
 	Biarthday time.Time
 }
 

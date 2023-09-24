@@ -10,4 +10,4 @@ er:
   distance: 9
 exclude:
   - gorp_migrations
-docPath: ../docs/db
+docPath: docs/db
