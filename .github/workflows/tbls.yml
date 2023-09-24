@@ -46,7 +46,7 @@ jobs:
       - name: Execute tbls
         run: |
           curl -sL https://git.io/use-tbls > use-tbls.tmp && . ./use-tbls.tmp && rm ./use-tbls.tmp
-          tbls doc -f
+          tbls doc -f -c ./tbls/tbls.yml
         # working-directory: ./tbls
       - name: Count uncommit files
         id: check_diff
