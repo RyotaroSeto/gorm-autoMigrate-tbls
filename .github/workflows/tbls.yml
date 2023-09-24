@@ -37,17 +37,15 @@ jobs:
       - name: Setup go
         uses: actions/setup-go@v4
         with:
-          go-version: "^1.21.1"
+          go-version: ">=1.21"
           go-version-file: tbls/go.mod
           cache: true
           cache-dependency-path: tbls/go.sum
-      - name: Get dependencies
-        run: go mod tidy
       - name: Execute migration
+        working-directory: ./tbls
         run: |
           cd tbls
           go run main.go
-        working-directory: ./tbls
       - name: Execute tbls
         run: |
           curl -sL https://git.io/use-tbls > use-tbls.tmp && . ./use-tbls.tmp && rm ./use-tbls.tmp
