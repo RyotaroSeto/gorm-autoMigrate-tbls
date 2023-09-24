@@ -41,10 +41,11 @@ jobs:
           go-version-file: tbls/go.mod
           cache: true
           cache-dependency-path: tbls/go.sum
+      - name: Build
+        run: go build -v ./...
       - name: Execute migration
         working-directory: ./tbls
         run: |
-          cd tbls
           go run main.go
       - name: Execute tbls
         run: |
