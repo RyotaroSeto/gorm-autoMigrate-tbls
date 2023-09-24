@@ -1,0 +1,77 @@
+name: update er graph
+on:
+  pull_request:
+    paths:
+      - tbls/*
+
+jobs:
+  tbls:
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      pull-requests: write
+    name: generate-and-push
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: "postgres:15.4-alpine"
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: sample
+          POSTGRES_USER: sample
+          POSTGRES_PASSWORD: sample
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ">=1.21"
+          go-version-file: tbls/go.mod
+          cache: true
+          cache-dependency-path: tbls/go.sum
+      - name: Build
+        working-directory: ./tbls
+        run: go build main.go
+      - name: Execute migration
+        working-directory: ./tbls
+        run: |
+          go run main.go
+      - name: Execute tbls
+        run: |
+          curl -sL https://git.io/use-tbls > use-tbls.tmp && . ./use-tbls.tmp && rm ./use-tbls.tmp
+          tbls doc -f
+        working-directory: ./tbls
+      - name: Count uncommit files
+        id: check_diff
+        run: |
+          git status --porcelain | wc -l
+          file_count=$(git status --porcelain | wc -l)
+          echo "::set-output name=file_count::$file_count"
+        working-directory: ./tbls
+      - name: Commit ER graph
+        if: ${{ steps.check_diff.outputs.file_count != '0' }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generate er graphs from github actions"
+          git push
+        working-directory: ./tbls
+      - name: Report commit on pull request
+        if: ${{ steps.check_diff.outputs.file_count != '0' }}
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'github actions committed new ER files'
+            })
