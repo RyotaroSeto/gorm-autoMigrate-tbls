@@ -2,8 +2,8 @@ name: update er graph
 on:
   pull_request:
     paths:
-      - migrations/** # migrationファイルの中身の何か変更あったらCI
-      - tbls/tbls.yml # tbls.ymlの中身の何か変更あったらCI
+      - tbls/*
+
 jobs:
   tbls:
     permissions:
@@ -48,7 +48,6 @@ jobs:
           curl -sL https://git.io/use-tbls > use-tbls.tmp && . ./use-tbls.tmp && rm ./use-tbls.tmp
           tbls doc -f
         working-directory: ./tbls
-      # tbls実行後、差分有りもしくは新規ファイルの数をカウントする
       - name: Count uncommit files
         id: check_diff
         run: |
@@ -57,16 +56,14 @@ jobs:
           echo "::set-output name=file_count::$file_count"
         working-directory: ./tbls
       - name: Commit ER graph
-        # 更新したER図をPRにコミットする
         if: ${{ steps.check_diff.outputs.file_count != '0' }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "generate er graphs from actions"
+          git commit -m "generate er graphs from github actions"
           git push
         working-directory: ./tbls
-      # PRへ自動コミットしたらPRにコメントしておく
       - name: Report commit on pull request
         if: ${{ steps.check_diff.outputs.file_count != '0' }}
         uses: actions/github-script@v4
@@ -76,5 +73,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Actions committed new ER files🤖'
+              body: 'github actions committed new ER files'
             })
