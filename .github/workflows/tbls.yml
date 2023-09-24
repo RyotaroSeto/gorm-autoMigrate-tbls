@@ -13,16 +13,21 @@ jobs:
       pull-requests: write
     name: generate-and-push
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: localhost
+      DB_USER: sample
+      DB_PASSWORD: sample
+      DB_PORT: 5432
     services:
       postgres:
-        image: "postgres:15"
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        image: "postgres:15.4-alpine"
         ports:
           - 5432:5432
         env:
           POSTGRES_DB: sample
           POSTGRES_USER: sample
           POSTGRES_PASSWORD: sample
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,14 +38,12 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: "^1.21.1"
-      - name: Build
-        run: |
-          go install gorm.io/gorm@latest
-          go install gorm.io/driver/postgres@latest
-          go build tbls/main.go
+      - name: Get dependencies
+        run: go get .
       - name: Execute migration
         run: |
-          go run tbls/main.go
+          cd tbls
+          go run main.go
         working-directory: ./tbls
       - name: Execute tbls
         run: |

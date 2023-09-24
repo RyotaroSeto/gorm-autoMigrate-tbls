@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:15.4-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=sample
+      - POSTGRES_PASSWORD=sample
+      - POSTGRES_DB=sample
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d

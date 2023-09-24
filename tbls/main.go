@@ -38,7 +38,7 @@ func RDBConnect() (*DB, error) {
 }
 
 func createDB() (*gorm.DB, error) {
-	dsn := "host=" + "sample" + " user=" + "sample" + " password=" + "sample" + " port=" + "5432" + " sslmode=disable TimeZone=Asia/Tokyo"
+	dsn := "host=" + "127.0.0.1" + " user=" + "sample" + " password=" + "sample" + " port=" + "5432" + " sslmode=disable TimeZone=Asia/Tokyo"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("cannot connect to db", err)
