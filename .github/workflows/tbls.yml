@@ -42,7 +42,7 @@ jobs:
           cache: true
           cache-dependency-path: tbls/go.sum
       - name: Get dependencies
-        run: go get .
+        run: go mod tidy
       - name: Execute migration
         run: |
           cd tbls
