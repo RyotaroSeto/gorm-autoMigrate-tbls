@@ -12,6 +12,7 @@
 | deleted_at | timestamp with time zone |  | true |  |  |  |
 | name | text |  | true |  |  |  |
 | age | bigint |  | true |  |  |  |
+| from | text |  | true |  |  |  |
 | biarthday | timestamp with time zone |  | true |  |  |  |
 
 ## Constraints

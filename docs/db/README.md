@@ -4,7 +4,7 @@
 
 | Name | Columns | Comment | Type |
 | ---- | ------- | ------- | ---- |
-| [public.users](public.users.md) | 7 |  | BASE TABLE |
+| [public.users](public.users.md) | 8 |  | BASE TABLE |
 
 ## Relations
 
