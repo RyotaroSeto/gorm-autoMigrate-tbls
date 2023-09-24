@@ -13,11 +13,6 @@ jobs:
       pull-requests: write
     name: generate-and-push
     runs-on: ubuntu-latest
-    env:
-      DB_HOST: localhost
-      DB_USER: sample
-      DB_PASSWORD: sample
-      DB_PORT: 5432
     services:
       postgres:
         image: "postgres:15.4-alpine"
